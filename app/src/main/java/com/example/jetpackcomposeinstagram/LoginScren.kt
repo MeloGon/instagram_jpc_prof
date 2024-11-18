@@ -1,6 +1,7 @@
 package com.example.jetpackcomposeinstagram
 
 import android.app.Activity
+import android.util.Patterns
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,12 +18,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -39,6 +45,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -97,9 +105,15 @@ fun Body(modifier: Modifier) {
     Column(modifier = modifier) {
         ImageLogo(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.size(16.dp))
-        Email(email) { email = it }
+        Email(email) {
+            email = it
+            isLoginEnabled = enableLogin(email, password)
+        }
         Spacer(modifier = Modifier.size(4.dp))
-        Password(password) { password = it }
+        Password(password) {
+            password = it
+            isLoginEnabled = enableLogin(email, password)
+        }
         Spacer(modifier = Modifier.size(8.dp))
         ForgotPassword(Modifier.align(Alignment.End))
         Spacer(modifier = Modifier.size(16.dp))
@@ -164,7 +178,18 @@ fun LoginDivider() {
 
 @Composable
 fun LoginButton(loginEnable: Boolean) {
-    Button(enabled = loginEnable, onClick = {}, modifier = Modifier.fillMaxWidth()) {
+    Button(
+        shape = RoundedCornerShape(2.dp),
+        enabled = loginEnable,
+        onClick = {},
+        modifier = Modifier.fillMaxWidth(),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color(0xff4EA8E9),
+            disabledContainerColor = Color(0xFF78C8F9),
+            contentColor = Color.White,
+            disabledContentColor = Color.White
+        )
+    ) {
         Text(text = "Log In")
     }
 }
@@ -181,18 +206,32 @@ fun ForgotPassword(modifier: Modifier) {
 
 @Composable
 fun Password(password: String, onTextChanged: (String) -> Unit) {
+    var passwordVisibility by rememberSaveable { mutableStateOf(false) }
     TextField(
         value = password,
         onValueChange = { onTextChanged(it) },
         modifier = Modifier.fillMaxWidth(),
-        placeholder = { Text(text = "Phone number, username or email") },
+        placeholder = { Text(text = "Password") },
         maxLines = 1,
         singleLine = true,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent
-        )
+        ),
+        visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+        trailingIcon = {
+            val imagen = if (passwordVisibility) {
+                Icons.Filled.VisibilityOff
+            } else {
+                Icons.Filled.Visibility
+            }
+            IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
+                Icon(imageVector = imagen, contentDescription = "show password")
+            }
+        }
+
+
     )
 }
 
@@ -230,3 +269,13 @@ fun Header(modifier: Modifier) {
         contentDescription = "close app",
         modifier = modifier.clickable { activity.finish() })
 }
+
+fun enableLogin(email: String, password: String): Boolean {
+    return Patterns.EMAIL_ADDRESS.matcher(email).matches() &&
+            password.length > 6
+}
+
+//fun enableLogin(email: String, password: String) =>
+//     Patterns.EMAIL_ADDRESS.matcher(email).matches() &&
+//            password.length > 6
+
