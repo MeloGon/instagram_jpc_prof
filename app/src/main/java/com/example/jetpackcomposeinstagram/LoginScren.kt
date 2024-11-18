@@ -217,7 +217,9 @@ fun Password(password: String, onTextChanged: (String) -> Unit) {
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
+            unfocusedIndicatorColor = Color.Transparent,
+            focusedContainerColor = Color.White,
+            unfocusedContainerColor = Color.Gray.copy(alpha = 0.1f)
         ),
         visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {
@@ -247,7 +249,9 @@ fun Email(email: String, onTextChanged: (String) -> Unit) {
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
+            unfocusedIndicatorColor = Color.Transparent,
+            focusedContainerColor = Color.White,
+            unfocusedContainerColor = Color.Gray.copy(alpha = 0.1f)
         )
     )
 }
