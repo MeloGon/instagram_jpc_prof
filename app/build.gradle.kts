@@ -51,6 +51,8 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation("androidx.compose.material:material-icons-extended:$1.7.5")
     implementation(libs.androidx.runtime.livedata)
+    implementation("com.squareup.retrofit2:retrofit:2.6.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.4.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

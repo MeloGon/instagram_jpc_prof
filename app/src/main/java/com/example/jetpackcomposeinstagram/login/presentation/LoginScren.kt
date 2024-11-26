@@ -1,7 +1,6 @@
-package com.example.jetpackcomposeinstagram.login
+package com.example.jetpackcomposeinstagram.login.presentation
 
 import android.app.Activity
-import android.util.Patterns
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -50,6 +49,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.jetpackcomposeinstagram.R
+import com.example.jetpackcomposeinstagram.login.LoginViewModel
 
 @Composable
 fun LoginScreen(loginViewModel: LoginViewModel) {
@@ -117,7 +117,7 @@ fun Body(modifier: Modifier, loginViewModel: LoginViewModel) {
         Spacer(modifier = Modifier.size(8.dp))
         ForgotPassword(Modifier.align(Alignment.End))
         Spacer(modifier = Modifier.size(16.dp))
-        LoginButton(isLoginEnabled)
+        LoginButton(isLoginEnabled, loginViewModel)
         Spacer(modifier = Modifier.size(16.dp))
         LoginDivider()
         Spacer(modifier = Modifier.size(32.dp))
@@ -177,11 +177,11 @@ fun LoginDivider() {
 }
 
 @Composable
-fun LoginButton(loginEnable: Boolean) {
+fun LoginButton(loginEnable: Boolean, loginViewModel: LoginViewModel) {
     Button(
         shape = RoundedCornerShape(2.dp),
         enabled = loginEnable,
-        onClick = {},
+        onClick = { loginViewModel.onLoginSelected() },
         modifier = Modifier.fillMaxWidth(),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color(0xff4EA8E9),
